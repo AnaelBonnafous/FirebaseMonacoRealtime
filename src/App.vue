@@ -1,66 +1,52 @@
 <template>
   <h1>Realtime code with Firebase & Monaco</h1>
-  <div id="editor"></div>
+  <div class="flex">
+    <div class="editors">
+      <CodeEditor language="html" @update="(e) => (html = e)" />
+      <CodeEditor language="js" @update="(e) => (js = e)" />
+      <CodeEditor language="css" @update="(e) => (css = e)" />
+    </div>
+    <div class="preview">
+      <iframe
+        :srcDoc="srcDoc"
+        sandbox="allow-scripts allow-downloads allow-forms allow-modals allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-top-navigation-by-user-activation"
+        frameborder="0"
+      ></iframe>
+    </div>
+  </div>
 </template>
 
 <script>
-import * as monaco from "monaco-editor";
-import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
-
-import { db } from "./firestore";
-import { get, ref } from "firebase/database";
-
-import { FireMonacoEditor } from "@otjs/firebase-monaco";
-import { fromMonaco } from "@sagarjain0907/firepad";
+import CodeEditor from "./components/CodeEditor.vue";
 
 export default {
-  async mounted() {
-    // Ajout du worker pour autocompletion de l'html
-    self.MonacoEnvironment = {
-      getWorker: () => new htmlWorker(),
-    };
-
-    // Récupération de la référence firebase du fichier html
-    const databaseRef = (
-      await get(
-        ref(db, `groups/${import.meta.env.VITE_FIREBASE_GROUP_ID}/html`)
-      )
-    ).ref;
-
-    // Création de l'éditeur Monaco sur l'élément <div id="editor"></div>
-    const editor = monaco.editor.create(document.getElementById("editor"), {
-      value: "Hello world",
-      language: "html",
-      theme: "vs-dark",
-    });
-
-    // Options de l'utilisateur connecté, à redéfinir dans le fichier .env
-    const userOptions = {
-      userId: import.meta.env.VITE_FIREBASE_USER_ID, // required
-      userName: import.meta.env.VITE_FIREBASE_USER_NAME || "Anonymous",
-      userColor: import.meta.env.VITE_FIREBASE_USER_COLOR || "#5CD6FF",
-    };
-
-    let realTimeEditor = null;
-
-    //// Connexion Firebase/Monaco avec le package @otjs/firebase-monaco
-    realTimeEditor = new FireMonacoEditor({
-      databaseRef,
-      editor,
-      ...userOptions,
-    });
-
-    //// Connexion Firebase/Monaco avec le package @sagarjain0907/firepad
-    // realTimeEditor = fromMonaco(databaseRef, editor, userOptions);
-
-    console.log(realTimeEditor);
+  components: { CodeEditor },
+  data: () => ({
+    html: "",
+    css: "",
+    js: "",
+  }),
+  computed: {
+    srcDoc() {
+      return `<html lang='fr'><body>${this.html}</body><style>${this.css}</style><script>${this.js}<\/script></html>`;
+    },
   },
 };
 </script>
 
 <style scoped>
-#editor {
-  width: 800px;
-  height: 400px;
+.flex {
+  display: flex;
+}
+.preview {
+  width: 600px;
+  height: 620px;
+  box-sizing: border-box;
+  border: 2px solid black;
+}
+.preview iframe {
+  height: 100%;
+  width: 100%;
+  background-color: white;
 }
 </style>

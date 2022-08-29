@@ -7,7 +7,6 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
-    "@otjs/firebase-monaco": "^0.2.1",
     "@sagarjain0907/firepad": "^1.0.1",
     "firebase": "^9.9.3",
     "monaco-editor": "^0.34.0",
@@ -15,7 +14,6 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
-    "vite": "^2.5.4",
-    "vite-plugin-monaco-editor": "^1.1.0"
+    "vite": "^2.5.4"
   }
 }

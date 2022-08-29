@@ -1,0 +1,21 @@
+{
+  "name": "firebasemonacorealtime",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "@otjs/firebase-monaco": "^0.2.1",
+    "@sagarjain0907/firepad": "^1.0.1",
+    "firebase": "^9.9.3",
+    "monaco-editor": "^0.34.0",
+    "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.0.1",
+    "vite": "^3.0.4",
+    "vite-plugin-monaco-editor": "^1.1.0"
+  }
+}
